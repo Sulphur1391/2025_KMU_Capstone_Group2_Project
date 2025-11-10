@@ -1,0 +1,23 @@
+services:
+  redis-cache:
+    image: redis:7.2-alpine
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend-app:
+    build: .
+    container_name: backend-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      redis-cache:
+        condition: service_healthy  # ⭐ Redis가 healthy 상태일 때만 실행
+    environment:
+      - spring.data.redis.host=redis-cache
+      - spring.data.redis.port=6379
