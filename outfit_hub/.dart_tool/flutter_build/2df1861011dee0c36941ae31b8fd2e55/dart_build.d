@@ -1,0 +1,1 @@
+ /Users/yoleggk/dev/Git/2025_KMU_Capstone_Group2_Project/outfit_hub/.dart_tool/flutter_build/2df1861011dee0c36941ae31b8fd2e55/dart_build_result.json: 
