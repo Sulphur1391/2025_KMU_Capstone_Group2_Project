@@ -1,0 +1,36 @@
+package com.outfit.ai.cloth_app.controller;
+
+import com.outfit.ai.cloth_app.dto.WeatherDto;
+import com.outfit.ai.cloth_app.service.WeatherService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/weather")
+public class WeatherController {
+    private final WeatherService weatherService;
+    private final Logger log = LoggerFactory.getLogger(WeatherController.class);
+
+    public WeatherController(WeatherService weatherService) {
+        this.weatherService = weatherService;
+    }
+
+    @GetMapping
+    public ResponseEntity<WeatherDto> getLatestWeatherByLocation(
+            @RequestParam("location") String location) {
+        log.info("API 요청 수신: 위치 {}의 날씨 정보 조회", location);
+
+        WeatherDto weatherDto = weatherService.getWeather(location);
+
+        if (weatherDto != null && weatherDto.getDescription() != null &&
+                (weatherDto.getDescription().contains("실패") || weatherDto.getDescription().contains("오류"))) {
+            log.warn("날씨 정보 조회 실패 또는 오류 발생: {}", location);
+            return ResponseEntity.status(500).body(weatherDto);
+        }
+
+        log.info("날씨 정보 조회 성공 및 반환: {}", location);
+        return ResponseEntity.ok(weatherDto);
+    }
+}

@@ -1,50 +1,78 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.6'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.5.6'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.capston'
+group = 'com.outfit.ai.cloth_app'
 version = '0.0.1-SNAPSHOT'
 description = 'project_1009'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    tasks.withType(JavaCompile) {
+        options.compilerArgs.add('--enable-preview')
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	// ⭐ [추가됨] Redis 캐시 연동을 위한 의존성
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    //Spring Boot Starters (Web/Validation/Scheduler/Cache/Redis)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
-	// ⭐ [유지] 캐싱 시스템 사용을 위한 의존성
-	implementation 'org.springframework.boot:spring-boot-starter-cache'
+    //DB Driver
+    runtimeOnly 'org.postgresql:postgresql'
 
-	implementation 'org.springframework.boot:spring-boot-starter-quartz'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    //Vector, Hibernate, and Utility Dependencies
+    implementation 'org.hibernate.orm:hibernate-vector:6.4.0.Final'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.11.0'
+
+    //AWS S3 and Spring Cloud AWS
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.721'
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+    implementation 'io.awspring.cloud:spring-cloud-aws-context:2.4.4'
+
+    //Google APIs
+    implementation 'com.google.api-client:google-api-client:2.2.0'
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
+    implementation 'com.google.code.gson:gson'
+
+    //JWT (JJWT) Dependencies
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    //DevTool
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    //Test Dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
