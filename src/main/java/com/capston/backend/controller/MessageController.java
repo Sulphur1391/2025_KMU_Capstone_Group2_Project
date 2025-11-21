@@ -1,42 +1,52 @@
 package com.capston.backend.controller;
 
-import com.capston.backend.dto.MessageDto;
+import com.capston.backend.dto.NotificationDto;
+import com.capston.backend.entity.Message;
+import com.capston.backend.service.MessageService;
+import com.capston.backend.service.NoticeService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
 
-    private final Map<Long, MessageDto> messageStore = new HashMap<>();
-    private long messageIdSeq = 1;
+    private final MessageService messageService;
+    private final NoticeService noticeService;
 
-    /** 쪽지 보내기 */
+    public MessageController(MessageService messageService, NoticeService noticeService) {
+        this.messageService = messageService;
+        this.noticeService = noticeService;
+    }
+
+    // 쪽지 전송
     @PostMapping
-    public MessageDto sendMessage(@RequestBody MessageDto message) {
-        message.setId(messageIdSeq++);
-        messageStore.put(message.getId(), message);
-        return message;
+    public Message sendMessage(@RequestBody Message message) {
+        // 1️⃣ DB에 쪽지 저장
+        Message savedMessage = messageService.sendMessage(message);
+
+        // 2️⃣ 실시간 알림 전송
+        NotificationDto notification = new NotificationDto(
+                "MESSAGE",
+                message.getContent(),
+                message.getSender(),
+                message.getReceiver()
+        );
+        noticeService.sendMessageNotice(message.getReceiver(), notification);
+
+        return savedMessage;
     }
 
-    /** 특정 사용자에게 온 쪽지 목록 조회 */
-    @GetMapping("/inbox/{user}")
-    public List<MessageDto> getInbox(@PathVariable String user) {
-        List<MessageDto> inbox = new ArrayList<>();
-        for (MessageDto msg : messageStore.values()) {
-            if (msg.getReceiver().equals(user)) inbox.add(msg);
-        }
-        return inbox;
+    // 받은 쪽지 조회
+    @GetMapping("/inbox/{receiver}")
+    public List<Message> getReceivedMessages(@PathVariable String receiver) {
+        return messageService.getReceivedMessages(receiver);
     }
 
-    /** 특정 사용자가 보낸 쪽지 목록 조회 */
-    @GetMapping("/sent/{user}")
-    public List<MessageDto> getSent(@PathVariable String user) {
-        List<MessageDto> sent = new ArrayList<>();
-        for (MessageDto msg : messageStore.values()) {
-            if (msg.getSender().equals(user)) sent.add(msg);
-        }
-        return sent;
+    // 보낸 쪽지 조회
+    @GetMapping("/sent/{sender}")
+    public List<Message> getSentMessages(@PathVariable String sender) {
+        return messageService.getSentMessages(sender);
     }
 }
