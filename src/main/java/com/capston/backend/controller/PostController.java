@@ -41,12 +41,6 @@ public class PostController {
         postService.deletePost(id);
     }
 
-    // 댓글 작성
-    @PostMapping("/{postId}/comments")
-    public Comment addComment(@PathVariable Long postId, @RequestBody Comment comment) {
-        return postService.addComment(postId, comment);
-    }
-
     // 댓글 좋아요
     @PostMapping("/{postId}/comments/{commentId}/like")
     public Comment likeComment(@PathVariable Long postId, @PathVariable Long commentId) {
