@@ -20,7 +20,7 @@ public class RefreshToken {
 
     @Column(name = "user_email", nullable = false, unique = true)
     private String userEmail;
-
+    
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
 
