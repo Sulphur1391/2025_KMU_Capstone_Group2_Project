@@ -13,6 +13,9 @@ public class UserCalendar {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID eventId;
 
+    @Column(name = "google_event_id", nullable = false, unique = true)
+    private String googleEventId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserTable userTable;
@@ -43,6 +46,10 @@ public class UserCalendar {
 
     public UUID getEventId() { return eventId; }
 
+    public String getGoogleEventId() { return googleEventId; }
+
+    public UserTable getUserTable() { return userTable; }
+
     public OffsetDateTime getStartTime() { return startTime; }
 
     public OffsetDateTime getEndTime() { return endTime; }
@@ -57,6 +64,12 @@ public class UserCalendar {
 
     public OffsetDateTime getCreatedAt() { return createdAt; }
 
+    public void setEventId(UUID eventId) { this.eventId = eventId; }
+
+    public void setGoogleEventId(String googleEventId) { this.googleEventId = googleEventId; }
+
+    public void setUserTable(UserTable userTable) { this.userTable = userTable; }
+
     public void setStartTime(OffsetDateTime startTime) { this.startTime = startTime; }
 
     public void setEndTime(OffsetDateTime endTime) { this.endTime = endTime; }
@@ -69,5 +82,5 @@ public class UserCalendar {
 
     public void setJsonData(String jsonData) { this.jsonData = jsonData; }
 
-    public void setAllDay(Boolean allDay) { isAllDay = allDay; }
+    public void setIsAllDay(Boolean allDay) { isAllDay = allDay; }
 }

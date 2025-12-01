@@ -38,9 +38,13 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/weather/**")
-                        .permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/weather/**").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/calendar/**").authenticated()
                         .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl("/calendar/add-test-event", true)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
