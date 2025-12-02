@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 
 @Entity
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String content;
-
     private int likes = 0;
     private int dislikes = 0;
 
@@ -17,11 +17,13 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Comment() {}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User author;
 
-    public Comment(String content) {
-        this.content = content;
-    }
+    private String targetId; // 알림용 대상 ID
+
+    public Comment() {}
 
     // getter / setter
     public Long getId() { return id; }
@@ -38,4 +40,10 @@ public class Comment {
 
     public Post getPost() { return post; }
     public void setPost(Post post) { this.post = post; }
+
+    public User getAuthor() { return author; }
+    public void setAuthor(User author) { this.author = author; }
+
+    public String getTargetId() { return targetId; }
+    public void setTargetId(String targetId) { this.targetId = targetId; }
 }

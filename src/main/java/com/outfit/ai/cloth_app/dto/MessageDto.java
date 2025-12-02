@@ -4,17 +4,18 @@ import java.time.LocalDateTime;
 
 public class MessageDto {
     private Long id;
-    private String sender;
-    private String receiver;
+    // FIXED: sender/receiver를 String으로 쓰지 않고 userId(Long)로 참조
+    private Long senderId;
+    private Long receiverId;
     private String content;
     private LocalDateTime sentAt = LocalDateTime.now();
 
     public MessageDto() {}
 
-    public MessageDto(Long id, String sender, String receiver, String content) {
+    public MessageDto(Long id, Long senderId, Long receiverId, String content) {
         this.id = id;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
         this.content = content;
         this.sentAt = LocalDateTime.now();
     }
@@ -23,11 +24,11 @@ public class MessageDto {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getSender() { return sender; }
-    public void setSender(String sender) { this.sender = sender; }
+    public Long getSenderId() { return senderId; }
+    public void setSenderId(Long senderId) { this.senderId = senderId; }
 
-    public String getReceiver() { return receiver; }
-    public void setReceiver(String receiver) { this.receiver = receiver; }
+    public Long getReceiverId() { return receiverId; }
+    public void setReceiverId(Long receiverId) { this.receiverId = receiverId; }
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }

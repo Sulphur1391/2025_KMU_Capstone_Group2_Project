@@ -1,4 +1,4 @@
-package com.outfit.ai.cloth_app.util;
+package com.outfit.ai.cloth_app.api.weather_api;
 
 import com.outfit.ai.cloth_app.dto.WeatherDto;
 import com.fasterxml.jackson.databind.JsonNode;

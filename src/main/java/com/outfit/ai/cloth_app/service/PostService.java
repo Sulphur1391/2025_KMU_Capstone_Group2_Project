@@ -1,7 +1,6 @@
 package com.outfit.ai.cloth_app.service;
 
 import com.outfit.ai.cloth_app.entity.Post;
-import com.outfit.ai.cloth_app.entity.Comment;
 import com.outfit.ai.cloth_app.repository.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,33 +17,56 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    /** 게시글 전체 조회 */
+    /**
+     * 게시글 전체 조회
+     * 단순한 read 작업이므로 findAll()만 호출
+     */
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
-    /** 단일 게시글 조회 */
+    /**
+     * 단일 게시글 조회
+     * 존재하지 않으면 예외 반환 → Controller에서 404로 처리 가능
+     */
     public Post getPostById(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글 없음"));
     }
 
-    /** 게시글 생성 */
+    /**
+     * 게시글 생성
+     * JPA save 호출하면 insert 쿼리 실행
+     */
     public Post createPost(Post post) {
         return postRepository.save(post);
     }
 
-    /** 게시글 수정 */
+    /**
+     * 게시글 수정
+     * ⚠ 주의: setAuthor()는 필요할 때만 덮어쓰도록 변경해야 실무에서 안전함
+     * 현재는 모든 필드를 클라이언트 요청대로 완전히 재작성하는 구조
+     */
     public Post updatePost(Long postId, Post updatedPost) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글 없음"));
+
+        // [수정됨] 변경 가능한 필드만 업데이트
         post.setTitle(updatedPost.getTitle());
         post.setContent(updatedPost.getContent());
-        post.setAuthor(updatedPost.getAuthor()); // ✅ 이제 빌드 통과
+
+        // [중요] author 변경 필요하지 않으면 빼는 게 안전.
+        // 하지만 너희 팀 구조에서 요청에 author 포함되므로 유지.
+        post.setAuthor(updatedPost.getAuthor());
+
+        // [해결] save를 호출해야 실제 DB에 반영됨
         return postRepository.save(post);
     }
 
-    /** 게시글 삭제 */
+    /**
+     * 게시글 삭제
+     * 존재 여부 먼저 체크 → JpaException 방지
+     */
     public void deletePost(Long postId) {
         if (!postRepository.existsById(postId)) {
             throw new RuntimeException("게시글 없음");
@@ -52,55 +74,5 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
-    /** 댓글 추가 */
-    public Comment addComment(Long postId, Comment comment) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("게시글 없음"));
-
-        comment.setPost(post); // 댓글에 Post 연결
-        post.getComments().add(comment);
-        postRepository.save(post); // 댓글 반영
-        return comment;
-    }
-
-    /** 댓글 삭제 */
-    public void deleteComment(Long postId, Long commentId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("게시글 없음"));
-
-        boolean removed = post.getComments().removeIf(c -> c.getId().equals(commentId));
-        if (!removed) throw new RuntimeException("댓글 없음");
-
-        postRepository.save(post);
-    }
-
-    /** 댓글 좋아요 */
-    public Comment likeComment(Long postId, Long commentId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("게시글 없음"));
-
-        Comment comment = post.getComments().stream()
-                .filter(c -> c.getId().equals(commentId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("댓글 없음"));
-
-        comment.setLikes(comment.getLikes() + 1);
-        postRepository.save(post);
-        return comment;
-    }
-
-    /** 댓글 싫어요 */
-    public Comment dislikeComment(Long postId, Long commentId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("게시글 없음"));
-
-        Comment comment = post.getComments().stream()
-                .filter(c -> c.getId().equals(commentId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("댓글 없음"));
-
-        comment.setDislikes(comment.getDislikes() + 1);
-        postRepository.save(post);
-        return comment;
-    }
+    // [정리] 댓글 관련 로직은 CommentService로 책임 분리됨 → 여기에 둘 필요 없음
 }
