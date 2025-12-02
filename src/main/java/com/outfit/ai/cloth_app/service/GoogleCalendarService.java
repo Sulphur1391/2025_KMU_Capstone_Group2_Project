@@ -1,5 +1,6 @@
 package com.outfit.ai.cloth_app.service;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -10,33 +11,43 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
+import com.outfit.ai.cloth_app.dto.response.DailyScheduleDto;
+import com.outfit.ai.cloth_app.dto.response.EventDetailDto;
 import com.outfit.ai.cloth_app.repository.UserCalendarRepository;
 import com.outfit.ai.cloth_app.repository.UserRepository;
 import com.outfit.ai.cloth_app.tables.UserCalendar;
 import com.outfit.ai.cloth_app.tables.UserTable;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Optional;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class GoogleCalendarService {
     private static final String APPLICATION_NAME = "ClothApp AI Outfit Recommender";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    private static final String REGISTRATION_ID = "google";
 
     private final UserCalendarRepository userCalendarRepository;
     private final UserRepository userRepository;
+    private final OAuth2AuthorizedClientService clientService;
 
-    public GoogleCalendarService(UserCalendarRepository userCalendarRepository, UserRepository userRepository) {
+    public GoogleCalendarService(
+            UserCalendarRepository userCalendarRepository,
+            UserRepository userRepository,
+            OAuth2AuthorizedClientService clientService) {
         this.userCalendarRepository = userCalendarRepository;
         this.userRepository = userRepository;
+        this.clientService = clientService;
     }
 
     private Calendar buildCalendarService(Credential credential) throws GeneralSecurityException, IOException {
@@ -46,16 +57,38 @@ public class GoogleCalendarService {
                 .build();
     }
 
+    private Calendar getCalendarClientForCurrentUser() throws GeneralSecurityException, IOException {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String principalId = principal.toString();
+
+        OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
+                REGISTRATION_ID,
+                principalId
+        );
+
+        if (client == null || client.getAccessToken() == null) {
+            throw new RuntimeException("OAuth2 Client를 찾을 수 없거나 Access Token이 없습니다.");
+        }
+
+        String accessToken = client.getAccessToken().getTokenValue();
+        Credential credential = new GoogleCredential().setAccessToken(accessToken);
+
+        return buildCalendarService(credential);
+    }
+
     @Transactional
-    public List<UserCalendar> fetchAndSaveSchedules(Credential credential, String userIdentifier)
+    public List<UserCalendar> fetchAndSaveSchedules(String userIdentifier)
         throws IOException, GeneralSecurityException {
-        Optional<UserTable> userOptional = userRepository.findByEmail(userIdentifier);
+        UUID userId = UUID.fromString(userIdentifier);
+        Optional<UserTable> userOptional = userRepository.findById(userId);
+
         if (userOptional.isEmpty()) {
             throw new IllegalArgumentException("User not found identifier: " + userIdentifier);
         }
         UserTable currentUser = userOptional.get();
 
-        Calendar service = buildCalendarService(credential);
+        Calendar service = getCalendarClientForCurrentUser();
         String calenderId = "primary";
 
         DateTime now = new DateTime(System.currentTimeMillis());
@@ -100,10 +133,69 @@ public class GoogleCalendarService {
 
                     return userCalendar;
                 })
-                .filter(s -> s != null)
+                .filter(Objects::nonNull)
                 .toList();
 
         return userCalendarRepository.saveAll(newSchedules);
+    }
+
+    public List<DailyScheduleDto> getEventFromDbForThisWeek(String userIdentifier) {
+        UUID userId = UUID.fromString(userIdentifier);
+        Optional<UserTable> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isEmpty()) {
+            throw new IllegalArgumentException("User not found identifier: " + userIdentifier);
+        }
+        UserTable currentUser = userOptional.get();
+
+        ZoneId systemZone = ZoneId.systemDefault();
+        LocalDate today = LocalDate.now();
+        OffsetDateTime startOfWeek = today.with(DayOfWeek.MONDAY).atStartOfDay(systemZone).toOffsetDateTime();
+        OffsetDateTime endOfWeek = today.with(DayOfWeek.SUNDAY).plusDays(1).atStartOfDay(systemZone).toOffsetDateTime();
+
+        List<UserCalendar> allSchedules = userCalendarRepository.findByUserTable(currentUser);
+
+        List<UserCalendar> weeklySchedules = allSchedules.stream()
+                .filter(s -> s.getStartTime() != null &&
+                        s.getStartTime().isAfter(startOfWeek) &&
+                        s.getStartTime().isBefore(endOfWeek))
+                .sorted(Comparator.comparing(UserCalendar::getStartTime))
+                .toList();
+
+        return mapEntitiesToScheduleDto(weeklySchedules, today.with(DayOfWeek.MONDAY), today.with(DayOfWeek.SUNDAY));
+    }
+
+    private List<DailyScheduleDto> mapEntitiesToScheduleDto(List<UserCalendar> schedules, LocalDate startOfWeek, LocalDate endOfWeek) {
+        Map<LocalDate, List<EventDetailDto>> dateMap = new HashMap<>();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREA);
+
+        for (UserCalendar schedule : schedules) {
+            LocalDateTime startDateTime = schedule.getStartTime().atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDate eventDate = startDateTime.toLocalDate();
+            String eventTime = startDateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+
+            EventDetailDto dto = new EventDetailDto(
+                    schedule.getEventSummary() != null ? schedule.getEventSummary() : "제목 없음",
+                    eventTime,
+                    schedule.getLocation(),
+                    schedule.getDressCodeTag() != null ? List.of(schedule.getDressCodeTag()) : Collections.emptyList()
+            );
+
+            dateMap.computeIfAbsent(eventDate, k -> new ArrayList<>()).add(dto);
+        }
+
+        List<DailyScheduleDto> weeklySchedule = new ArrayList<>();
+        LocalDate current = startOfWeek;
+
+        while (!current.isAfter(endOfWeek)) {
+            List<EventDetailDto> dayEvents = dateMap.getOrDefault(current, Collections.emptyList());
+            String formattedDate = current.format(dateFormatter);
+
+            weeklySchedule.add(new DailyScheduleDto(current, formattedDate, dayEvents));
+            current = current.plusDays(1);
+        }
+
+        return weeklySchedule;
     }
 
     private OffsetDateTime toOffsetDateTime(EventDateTime eventDateTime) {

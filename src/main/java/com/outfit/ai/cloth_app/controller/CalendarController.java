@@ -34,7 +34,7 @@ public class CalendarController {
             Authentication authentication) {
         String accessToken = authorizedClient.getAccessToken().getTokenValue();
 
-        String userEmail = authentication.getName();
+        String userIdString = authentication.getName();
 
         try {
             Credential credential = new GoogleCredential.Builder()
@@ -43,7 +43,7 @@ public class CalendarController {
                     .build()
                     .setAccessToken(accessToken);
 
-            List<UserCalendar> schedules = calendarService.fetchAndSaveSchedules(credential, userEmail);
+            List<UserCalendar> schedules = calendarService.fetchAndSaveSchedules(userIdString);
 
             return ResponseEntity.ok(schedules);
 
