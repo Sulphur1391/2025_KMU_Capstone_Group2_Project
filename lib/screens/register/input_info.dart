@@ -9,9 +9,8 @@ class InputInfoScreen extends StatefulWidget {
 }
 
 class _InputInfoScreenState extends State<InputInfoScreen> {
-  //선택값들
+  //필터값
   String? category;
-  String? size;
   String? season;
   String? color;
 
@@ -20,6 +19,12 @@ class _InputInfoScreenState extends State<InputInfoScreen> {
 
   final Color lime = AppColors.primary;
   final Color limeDark = AppColors.primaryDark;
+
+  final categories = ["상의", "하의", "아우터", "원피스", "신발"];
+
+  final seasons = ["봄", "여름", "가을", "겨울", "사계절"];
+
+  final colors = ["화이트", "블랙", "블루", "네이비", "핑크", "레드", "퍼플", "베이지"];
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +44,8 @@ class _InputInfoScreenState extends State<InputInfoScreen> {
             _buildDropdown(
               title: "카테고리",
               value: category,
-              items: ["상의", "하의", "아우터", "신발", "악세사리"],
+              items: categories,
               onChanged: (v) => setState(() => category = v),
-            ),
-
-            const SizedBox(height: 16),
-
-            //사이즈
-            _buildDropdown(
-              title: "사이즈",
-              value: size,
-              items: ["Free", "S", "M", "L", "XL"],
-              onChanged: (v) => setState(() => size = v),
             ),
 
             const SizedBox(height: 16),
@@ -59,7 +54,7 @@ class _InputInfoScreenState extends State<InputInfoScreen> {
             _buildDropdown(
               title: "색상",
               value: color,
-              items: ["블랙", "화이트", "그레이", "네이비", "베이지"],
+              items: colors,
               onChanged: (v) => setState(() => color = v),
             ),
 
@@ -69,7 +64,7 @@ class _InputInfoScreenState extends State<InputInfoScreen> {
             _buildDropdown(
               title: "계절",
               value: season,
-              items: ["봄", "여름", "가을", "겨울", "올시즌"],
+              items: seasons,
               onChanged: (v) => setState(() => season = v),
             ),
 
@@ -108,7 +103,6 @@ class _InputInfoScreenState extends State<InputInfoScreen> {
     );
   }
 
-  //Dropdown builder
   Widget _buildDropdown({
     required String title,
     required String? value,
@@ -142,7 +136,7 @@ class _InputInfoScreenState extends State<InputInfoScreen> {
     );
   }
 
-  // TextField builder
+  //TextField builder
   Widget _buildTextField(String title, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

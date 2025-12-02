@@ -12,48 +12,177 @@ class ClosetListScreen extends StatefulWidget {
 
 class _ClosetListScreenState extends State<ClosetListScreen>
     with SingleTickerProviderStateMixin {
+  //---------------------- 더미 데이터 ----------------------
   final List<Map<String, dynamic>> items = [
+    //상의
     {
-      "name": "반팔티",
       "category": "상의",
+      "type": "셔츠",
+      "name": "깔끔한 기본 셔츠",
+      "season": "봄",
+      "style": "포멀",
+      "color": "화이트",
+      "material": "면",
       "image": "",
-      "season": null,
-      "style": null,
-      "color": null,
     },
     {
-      "name": "청바지",
+      "category": "상의",
+      "type": "티셔츠",
+      "name": "얇은 이너 티셔츠",
+      "season": "여름",
+      "style": "캐주얼",
+      "color": "카키",
+      "material": "면",
+      "image": "",
+    },
+    {
+      "category": "상의",
+      "type": "맨투맨",
+      "name": "오버핏 맨투맨",
+      "season": "가을",
+      "style": "데일리",
+      "color": "그레이",
+      "material": "니트",
+      "image": "",
+    },
+    {
+      "category": "상의",
+      "type": "후드",
+      "name": "두꺼운 후드티",
+      "season": "겨울",
+      "style": "스트릿",
+      "color": "네이비",
+      "material": "면",
+      "image": "",
+    },
+
+    //하의
+    {
       "category": "하의",
-      "image": null,
-      "season": null,
-      "style": null,
-      "color": null,
-    },
-    {
-      "name": "패딩",
-      "category": "아우터",
-      "image": "https://via.placeholder.com/150",
-      "season": null,
-      "style": null,
-      "color": null,
-    },
-    {
-      "name": "운동화",
-      "category": "신발",
+      "type": "바지",
+      "name": "슬림핏 청바지",
+      "season": "사계절",
+      "style": "캐주얼",
+      "color": "블루",
+      "material": "데님",
       "image": "",
-      "season": null,
-      "style": null,
-      "color": null,
+    },
+    {
+      "category": "하의",
+      "type": "치마",
+      "name": "미니 스커트",
+      "season": "여름",
+      "style": "미니멀",
+      "color": "블랙",
+      "material": "폴리",
+      "image": "",
+    },
+    {
+      "category": "하의",
+      "type": "치마",
+      "name": "플레어 롱 스커트",
+      "season": "봄",
+      "style": "러블리",
+      "color": "베이지",
+      "material": "린넨",
+      "image": "",
+    },
+    {
+      "category": "하의",
+      "type": "반바지",
+      "name": "시원한 반바지",
+      "season": "여름",
+      "style": "캐주얼",
+      "color": "베이지",
+      "material": "면",
+      "image": "",
+    },
+
+    //아우터
+    {
+      "category": "아우터",
+      "type": "패딩",
+      "name": "겨울 패딩",
+      "season": "겨울",
+      "style": "데일리",
+      "color": "블랙",
+      "material": "패딩",
+      "image": "",
+    },
+    {
+      "category": "아우터",
+      "type": "자켓",
+      "name": "깔쌈한 자켓",
+      "season": "봄",
+      "style": "포멀",
+      "color": "블랙",
+      "material": "폴리",
+      "image": "",
+    },
+
+    //원피스
+    {
+      "category": "원피스",
+      "type": "원피스",
+      "name": "플라워 원피스",
+      "season": "여름",
+      "style": "러블리",
+      "color": "핑크",
+      "material": "폴리",
+      "image": "",
+    },
+    {
+      "category": "원피스",
+      "type": "원피스",
+      "name": "슬림 원피스",
+      "season": "가을",
+      "style": "포멀",
+      "color": "블랙",
+      "material": "니트",
+      "image": "",
+    },
+
+    //신발
+    {
+      "category": "신발",
+      "type": "스니커즈",
+      "name": "포인트 스니커즈",
+      "season": "사계절",
+      "style": "캐주얼",
+      "color": "레드",
+      "material": "레더",
+      "image": "",
+    },
+    {
+      "category": "신발",
+      "type": "구두",
+      "name": "하이힐 구두",
+      "season": "봄",
+      "style": "포멀",
+      "color": "퍼플",
+      "material": "스웨이드",
+      "image": "",
+    },
+    {
+      "category": "신발",
+      "type": "부츠",
+      "name": "블랙 앵클부츠",
+      "season": "겨울",
+      "style": "미니멀",
+      "color": "블랙",
+      "material": "레더",
+      "image": "",
     },
   ];
 
+  //필터값
   String? filterSeason;
   String? filterStyle;
   String? filterColor;
 
   late TabController _tabController;
 
-  final List<String> tabs = ["전체", "상의", "하의", "아우터", "신발", "위시"];
+  final List<String> tabs = ["전체", "상의", "하의", "아우터", "원피스", "신발", "위시"];
 
   @override
   void initState() {
@@ -61,6 +190,7 @@ class _ClosetListScreenState extends State<ClosetListScreen>
     _tabController = TabController(length: tabs.length, vsync: this);
   }
 
+  //필터 태그
   List<Widget> _buildFilterTags() {
     List<Widget> tags = [];
 
@@ -125,6 +255,7 @@ class _ClosetListScreenState extends State<ClosetListScreen>
     );
   }
 
+  //---------------------- 화면 ----------------------
   @override
   Widget build(BuildContext context) {
     final filterTags = _buildFilterTags();
@@ -173,28 +304,29 @@ class _ClosetListScreenState extends State<ClosetListScreen>
               ),
             ),
 
-          // 탭바
+          //TabBar
           Container(
-            padding: const EdgeInsets.only(left: 4),
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              border: Border(
-                bottom: BorderSide(
-                  color: AppColors.primaryDark.withOpacity(0.5),
-                  width: 1,
+            width: double.infinity,
+            color: AppColors.primary,
+            padding: const EdgeInsets.only(left: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TabBar(
+                    controller: _tabController,
+                    isScrollable: true,
+
+                    padding: EdgeInsets.zero,
+                    tabAlignment: TabAlignment.start,
+                    labelPadding: const EdgeInsets.only(right: 20),
+
+                    indicatorColor: Colors.white,
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.white70,
+                    tabs: tabs.map((e) => Tab(text: e)).toList(),
+                  ),
                 ),
-              ),
-            ),
-            child: TabBar(
-              controller: _tabController,
-              isScrollable: true,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 12),
-              indicatorPadding: EdgeInsets.zero,
-              tabAlignment: TabAlignment.start,
-              indicatorColor: Colors.white,
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.white70,
-              tabs: tabs.map((e) => Tab(text: e)).toList(),
+              ],
             ),
           ),
 
@@ -214,6 +346,7 @@ class _ClosetListScreenState extends State<ClosetListScreen>
     );
   }
 
+  //카테고리별 렌더링
   Widget _buildCategoryView(String category) {
     var filtered = category == "전체"
         ? items
@@ -250,6 +383,16 @@ class _ClosetListScreenState extends State<ClosetListScreen>
             );
 
             if (result != null) {
+              //삭제
+              if (result is Map && result["delete"] == true) {
+                final deletedItem = result["item"];
+                setState(() {
+                  items.removeWhere((i) => i["name"] == deletedItem["name"]);
+                });
+                return;
+              }
+
+              //수정
               final updatedItem = result as Map<String, dynamic>;
               setState(() {
                 final idx = items.indexWhere(
@@ -287,6 +430,7 @@ class _ClosetListScreenState extends State<ClosetListScreen>
                     child: safeImage(item["image"], fit: BoxFit.cover),
                   ),
                 ),
+
                 const SizedBox(height: 10),
 
                 Padding(
