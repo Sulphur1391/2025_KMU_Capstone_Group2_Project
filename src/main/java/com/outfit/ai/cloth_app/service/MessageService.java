@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+// 쪽지 서비스
 @Service
 public class MessageService {
     private MessageRepository messageRepository;
@@ -21,6 +22,7 @@ public class MessageService {
         this.userRepository = userRepository;
     }
 
+    // 쪽지 보내기
     public MessageDto sendMessage(UUID senderId, MessageDto messageDto) {
         UserTable sender = userRepository.findById(senderId)
                 .orElseThrow(() -> new RuntimeException("Sender not found."));
@@ -38,6 +40,7 @@ public class MessageService {
         return MessageDto.fromEntity(savedMessage);
     }
 
+    // 쪽지함 불러오기
     public List<MessageDto> getInbox(UUID receiverId) {
         UserTable receiver = userRepository.findById(receiverId)
                 .orElseThrow(() -> new RuntimeException("User not found."));
@@ -49,6 +52,7 @@ public class MessageService {
                 .collect(Collectors.toList());
     }
 
+    // 받은 쪽지 불러오기
     public List<MessageDto> getSent(UUID senderId) {
         UserTable sender = userRepository.findById(senderId)
                 .orElseThrow(() -> new RuntimeException("User not found."));

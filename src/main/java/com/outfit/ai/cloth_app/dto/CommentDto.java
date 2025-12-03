@@ -2,6 +2,7 @@ package com.outfit.ai.cloth_app.dto;
 
 import com.outfit.ai.cloth_app.tables.CommunityInteractions;
 
+// 댓글 DTO
 public class CommentDto {
     private String id;
     private String author;

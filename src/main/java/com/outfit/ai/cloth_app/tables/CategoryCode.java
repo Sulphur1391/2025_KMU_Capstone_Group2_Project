@@ -2,6 +2,7 @@ package com.outfit.ai.cloth_app.tables;
 
 import jakarta.persistence.*;
 
+// 옷 카테고리(상하의, 아우터, 신발) 테이블
 @Entity
 @Table(name="category_code")
 public class CategoryCode {
@@ -17,11 +18,11 @@ public class CategoryCode {
     public int getCategoryId() {
         return categoryId;
     }
+    public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
 
     public String getCategoryName() {
         return categoryName;
     }
-
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }

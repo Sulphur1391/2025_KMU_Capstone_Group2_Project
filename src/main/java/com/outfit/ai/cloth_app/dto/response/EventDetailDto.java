@@ -2,6 +2,7 @@ package com.outfit.ai.cloth_app.dto.response;
 
 import java.util.List;
 
+// 일정 세부사항 응답 DTO
 public class EventDetailDto {
     private String title;
     private String time;
@@ -16,18 +17,14 @@ public class EventDetailDto {
     }
 
     public String getTitle() { return title; }
-
-    public String getTime() { return time; }
-
-    public String getLocation() { return location; }
-
-    public List<String> getTags() { return tags; }
-
     public void setTitle(String title) { this.title = title; }
 
+    public String getTime() { return time; }
     public void setTime(String time) { this.time = time; }
 
+    public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 
+    public List<String> getTags() { return tags; }
     public void setTags(List<String> tags) { this.tags = tags; }
 }

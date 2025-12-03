@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
+// 날씨 서비스
 @Service
 @Transactional
 public class WeatherService {
@@ -32,6 +33,8 @@ public class WeatherService {
         this.objectMapper = objectMapper;
     }
 
+    // 날씨 데이터 받기
+    // 캐시 가능하게 설정
     @Cacheable(value = "weather", key = "#location")
     @Transactional
     public WeatherDto getWeather(String location) {
@@ -63,6 +66,7 @@ public class WeatherService {
         }
     }
 
+    // DB에서 날씨 데이터 불러오기
     private Optional<WeatherDto> getWeatherFromDb(String locationKey) {
         Optional<Weather> latestWeatherEntity = weatherRepository.findTopByLocationKeyOrderByWeatherId_CreatedAtDesc(locationKey);
 
@@ -79,6 +83,7 @@ public class WeatherService {
         return Optional.empty();
     }
 
+    // 날씨 엔티티 저장
     private void saveWeatherEntity(String locationKey, WeatherDto dto) {
         Weather weather = new Weather();
 
@@ -91,6 +96,7 @@ public class WeatherService {
         weatherRepository.save(weather);
     }
 
+    // JSON으로 데이터 변환하는 DTO
     private String convertDtoToJson(WeatherDto dto) {
         try {
             return objectMapper.writeValueAsString(dto);

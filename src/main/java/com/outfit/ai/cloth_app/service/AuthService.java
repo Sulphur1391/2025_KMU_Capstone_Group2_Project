@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+// JWT 통한 인증 서비스
 @Service
 public class AuthService {
     private final UserRepository userRepository;
@@ -27,6 +28,8 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // 회원가입
+    // 유저 이름, 이메일, 비밀번호 입력 받음
     @Transactional
     public void signUp(SignUpRequestDto request) {
         if(userRepository.existsByEmail(request.getEmail())) {
@@ -43,6 +46,7 @@ public class AuthService {
         userRepository.save(newUser);
     }
 
+    // 이메일로 로그인
     @Transactional(readOnly = true)
     public TokenResponseDto login(LoginRequestDto request) {
         UserTable user = userRepository.findByEmail(request.getEmail())

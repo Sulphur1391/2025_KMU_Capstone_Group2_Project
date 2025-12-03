@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+// 게시글 등록 서비스
 @Service
 @Transactional
 public class PostService {
@@ -33,6 +34,7 @@ public class PostService {
         this.userRepository = userRepository;
     }
 
+    // 모든 게시글 불러오기
     @Transactional(readOnly = true)
     public List<PostDto> getAllPost() {
         List<OutfitCombination> sharedOutfits = outfitRepository
@@ -43,6 +45,7 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    // 게시글 생성
     public PostDto createPost(UUID authorId, PostDto postDto) {
         UserTable author = userRepository.findById(authorId)
                 .orElseThrow(() -> new RuntimeException("작성자를 찾을 수 없습니다."));
@@ -67,6 +70,7 @@ public class PostService {
         return convertToPostDto(savedOutfit);
     }
 
+    // 게시글 수정
     public PostDto updatePost(UUID postId, UUID userId, PostDto postDto) throws AccessDeniedException {
         OutfitCombination existingOutfit = outfitRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
@@ -95,6 +99,7 @@ public class PostService {
         return convertToPostDto(outfitRepository.save(existingOutfit));
     }
 
+    // 게시글 삭제
     public void deletePost(UUID postId, UUID userId) throws AccessDeniedException {
         OutfitCombination existingOutfit = outfitRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
@@ -104,6 +109,7 @@ public class PostService {
         outfitRepository.delete(existingOutfit);
     }
 
+    // 댓글 달기
     public CommentDto addComment(UUID postId, UUID authorId, CommentDto commentDto) {
         OutfitCombination post = outfitRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
@@ -121,6 +127,7 @@ public class PostService {
         return CommentDto.fromEntity(savedComment, 0, 0);
     }
 
+    // 게시글, 댓글에 반응하기
     public CommentDto reactComment(UUID commentId, UUID userId, String type) {
         CommunityInteractions parentComment = interactionsRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다."));
@@ -139,6 +146,7 @@ public class PostService {
         return convertToCommentDtoWithCount(parentComment);
     }
 
+    // 댓글 삭제
     public void deleteComment(UUID commentId, UUID userId) throws AccessDeniedException {
         CommunityInteractions existingComment = interactionsRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("댓글을 찾을 수 없습니다."));
@@ -148,6 +156,7 @@ public class PostService {
         interactionsRepository.delete(existingComment);
     }
 
+    // 게시글로 변환하는 DTO
     private PostDto convertToPostDto(OutfitCombination outfit) {
         PostDto dto = PostDto.fromEntity(outfit);
 
@@ -162,6 +171,7 @@ public class PostService {
         return dto;
     }
 
+    // 좋아요, 싫어요 카운트 변환하는 DTO
     private CommentDto convertToCommentDtoWithCount(CommunityInteractions comment) {
         long likes = interactionsRepository
                 .countByParentAndInteractionType(comment, "LIKE");
@@ -172,6 +182,7 @@ public class PostService {
         return CommentDto.fromEntity(comment, (int)likes, (int)dislikes);
     }
 
+    // 권환(게시글 수정, 삭제 등) 확인
     private void checkAuthorization(UUID authorId, UUID requestId, String operation) throws AccessDeniedException {
         if (!authorId.equals(requestId)) {
             throw new AccessDeniedException(String.format("해당 %s을(를) 수행할 권한이 없습니다.", operation));

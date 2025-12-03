@@ -12,6 +12,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.UUID;
 
+// JWT토큰 제공
 @Component
 public class JwtTokenProvider {
     private static final Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
@@ -29,6 +30,7 @@ public class JwtTokenProvider {
         this.refreshExpiration = refreshExpiration;
     }
 
+    // 액세스 토큰 생성
     public String createAccessToken(UUID userId) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + accessExpiration);
@@ -41,6 +43,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    // 리프레시 토큰 생성
     public String createRefreshToken(UUID userId) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + refreshExpiration);
@@ -53,6 +56,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    // 토큰에서 유저 ID 얻기
     public UUID getUserIdFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -63,6 +67,7 @@ public class JwtTokenProvider {
         return UUID.fromString(claims.getSubject());
     }
 
+    // 토큰 유효한지 확인
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

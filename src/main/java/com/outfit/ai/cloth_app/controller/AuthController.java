@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// 인증 컨트롤러
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -19,12 +20,14 @@ public class AuthController {
         this.authService = authService;
     }
 
+    // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@RequestBody SignUpRequestDto request) {
         authService.signUp(request);
         return ResponseEntity.ok().build();
     }
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> login(@RequestBody LoginRequestDto request) {
         TokenResponseDto response = authService.login(request);

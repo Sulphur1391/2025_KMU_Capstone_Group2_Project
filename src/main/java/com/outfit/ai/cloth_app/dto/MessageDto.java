@@ -5,6 +5,7 @@ import com.outfit.ai.cloth_app.tables.MessageTable;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+// 쪽지 DTO
 public class MessageDto {
     private Long messageId;
     private String sender;

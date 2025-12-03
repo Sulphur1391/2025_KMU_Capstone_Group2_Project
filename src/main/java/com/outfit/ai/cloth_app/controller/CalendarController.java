@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
+// 캘린더 컨트롤러
 @RestController
 @RequestMapping("/api/v1/schedules")
 public class CalendarController {
@@ -28,6 +29,7 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
+    // 불러오고 저장
     @GetMapping("/fetch-and-save")
     public ResponseEntity<List<UserCalendar>> fetchAndSaveSchedulesApi(
             @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient authorizedClient,

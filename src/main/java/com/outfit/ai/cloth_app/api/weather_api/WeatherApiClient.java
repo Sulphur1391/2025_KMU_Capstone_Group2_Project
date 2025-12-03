@@ -16,6 +16,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+// 날씨 API 클라이언트
 @Component
 public class WeatherApiClient {
 

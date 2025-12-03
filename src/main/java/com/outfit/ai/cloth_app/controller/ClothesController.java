@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
+// 옷 컨트롤러
 @RestController
 @RequestMapping("/api/v1/wardrobe")
 public class ClothesController {
@@ -21,6 +22,7 @@ public class ClothesController {
         this.authService = authService;
     }
 
+    // 옷 등록
     @PostMapping("/clothes")
     public ResponseEntity<Void> createClothes(
             @RequestHeader("Authorization") String authorizationHeader,
@@ -33,6 +35,7 @@ public class ClothesController {
         return ResponseEntity.ok().build();
     }
 
+    // 옷 리스트 불러오가
     @GetMapping("/clothes")
     public ResponseEntity<ClothesListResponseDto> getClothesList(
             @RequestHeader("Authorization") String authorizationHeader) {

@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+// 날씨 테이블
 @Entity
 @Table(name="weather")
 public class Weather {
@@ -27,14 +28,14 @@ public class Weather {
     public Weather() {}
 
     public WeatherId getId() { return weatherId; }
-
-    public String getWeatherData() { return weatherData; }
-
-    public String getLocationKey() { return locationKey; }
-
     public void setId(WeatherId weatherId) { this.weatherId = weatherId; }
 
+    public List<OutfitCombination> getOutfitCombinations() { return outfitCombinations; }
+    public void setOutfitCombinations(List<OutfitCombination> outfitCombinations) { this.outfitCombinations = outfitCombinations; }
+
+    public String getWeatherData() { return weatherData; }
     public void setWeatherData(String weatherData) { this.weatherData = weatherData; }
 
+    public String getLocationKey() { return locationKey; }
     public void setLocationKey(String locationKey) { this.locationKey = locationKey; }
 }

@@ -31,6 +31,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+// 구글 캘린더 서비스
 @Service
 public class GoogleCalendarService {
     private static final String APPLICATION_NAME = "ClothApp AI Outfit Recommender";
@@ -57,6 +58,7 @@ public class GoogleCalendarService {
                 .build();
     }
 
+    // 현재 유저의 구글 캘린더 불러오기
     private Calendar getCalendarClientForCurrentUser() throws GeneralSecurityException, IOException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -77,6 +79,7 @@ public class GoogleCalendarService {
         return buildCalendarService(credential);
     }
 
+    // 스케쥴 불러오고 저장
     @Transactional
     public List<UserCalendar> fetchAndSaveSchedules(String userIdentifier)
         throws IOException, GeneralSecurityException {
@@ -139,6 +142,7 @@ public class GoogleCalendarService {
         return userCalendarRepository.saveAll(newSchedules);
     }
 
+    // 이번주 일정 DB에서 불러오기
     public List<DailyScheduleDto> getEventFromDbForThisWeek(String userIdentifier) {
         UUID userId = UUID.fromString(userIdentifier);
         Optional<UserTable> userOptional = userRepository.findById(userId);
@@ -165,6 +169,7 @@ public class GoogleCalendarService {
         return mapEntitiesToScheduleDto(weeklySchedules, today.with(DayOfWeek.MONDAY), today.with(DayOfWeek.SUNDAY));
     }
 
+    // map 엔티티를 스케쥴로 바꾸는 DTO
     private List<DailyScheduleDto> mapEntitiesToScheduleDto(List<UserCalendar> schedules, LocalDate startOfWeek, LocalDate endOfWeek) {
         Map<LocalDate, List<EventDetailDto>> dateMap = new HashMap<>();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREA);
@@ -198,6 +203,7 @@ public class GoogleCalendarService {
         return weeklySchedule;
     }
 
+    // OffsetDateTime으로 바꾸는 함수
     private OffsetDateTime toOffsetDateTime(EventDateTime eventDateTime) {
         DateTime dateTime = eventDateTime.getDateTime();
         DateTime dateOnly = eventDateTime.getDate();
@@ -213,6 +219,7 @@ public class GoogleCalendarService {
         throw new IllegalArgumentException("EventDateTime must contain either dateTime or date.");
     }
 
+    // 일정 생성
     public Event createCalendarEvent(Credential credential, String summary, String description, String startTime, String endTime)
         throws IOException, GeneralSecurityException {
         Calendar service = buildCalendarService(credential);

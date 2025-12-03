@@ -5,6 +5,7 @@ import com.outfit.ai.cloth_app.tables.OutfitCombination;
 import java.util.ArrayList;
 import java.util.List;
 
+// 게시글 DTO
 public class PostDto {
     private String id;
     private String author;

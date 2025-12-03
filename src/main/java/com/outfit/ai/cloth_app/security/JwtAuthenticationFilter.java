@@ -17,6 +17,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.Collections;
 import java.util.UUID;
 
+// JWT인증 필터
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
@@ -45,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    // 요청에서 JWT 토큰 받기
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
@@ -53,6 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
+    // 현재 유저 ID 받기
     private UUID getCurrentUserId() throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

@@ -11,6 +11,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
+// 구글 인증 컨트롤러
 @Controller
 public class GoogleAuthController {
     private final GoogleCalendarService calendarService;

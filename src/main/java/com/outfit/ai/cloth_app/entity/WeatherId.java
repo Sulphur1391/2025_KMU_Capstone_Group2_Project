@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+// 복합 기본키인 WeatherId 용 엔티티
+// 날씨 테이블의 weather_id와 created_at를 복합 기본키로 설정
 @Embeddable
 public class WeatherId implements Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,11 +24,9 @@ public class WeatherId implements Serializable {
     }
 
     public UUID getWeatherId() { return weatherId; }
-
-    public OffsetDateTime getCreatedAt() { return createdAt; }
-
     public void setWeatherId(UUID weatherId) { this.weatherId = weatherId; }
 
+    public OffsetDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
 
     @Override

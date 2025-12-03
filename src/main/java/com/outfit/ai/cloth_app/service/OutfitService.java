@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+// 옷조합 서비스
 @Service
 public class OutfitService {
     private final OutfitCombinationRepository outfitCombinationRepository;
@@ -29,6 +30,8 @@ public class OutfitService {
         this.userRepository = userRepository;
     }
 
+    // 최근 옷조합 불러오기
+    // limit은 한번에 불러올 옷조합 최대 수치
     public List<RecentOutfitDto> getRecentOutfits(String userIdentifier, int limit) {
         UUID userId;
         try {

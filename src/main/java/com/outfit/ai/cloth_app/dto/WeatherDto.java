@@ -2,6 +2,7 @@ package com.outfit.ai.cloth_app.dto;
 
 import java.io.Serializable;
 
+// 날씨 DTO
 public class WeatherDto implements Serializable {
 
     private static final long serialVersionUID = 1L;

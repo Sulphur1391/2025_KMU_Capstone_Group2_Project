@@ -12,6 +12,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
+// 게시글 컨트롤러
 @RestController
 @RequestMapping("/posts")
 public class PostController {
@@ -21,7 +22,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    // Extract UUID from current login user
+    // 현재 유저 ID에서 인증 확인
     private UUID getAuthenticatedUserId() throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
@@ -31,14 +32,14 @@ public class PostController {
         return UUID.fromString(authentication.getName());
     }
 
-    // Check all post (GET /posts)
+    // 모든 게시글 확인 (GET /posts)
     @GetMapping
     public ResponseEntity<List<PostDto>> getAllPost() {
         List<PostDto> posts = postService.getAllPost();
         return ResponseEntity.ok(posts);
     }
 
-    // Create post (POST /posts)
+    // 게시글 생성 (POST /posts)
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) throws AccessDeniedException {
         UUID authorId = getAuthenticatedUserId();
@@ -46,7 +47,7 @@ public class PostController {
         return ResponseEntity.ok(createdPost);
     }
 
-    // Edit post (PUT /posts/{id})
+    // 게시글 수정 (PUT /posts/{id})
     @PutMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(@PathVariable String id, @RequestBody PostDto postDto) throws AccessDeniedException {
         UUID postId = UUID.fromString(id);
@@ -56,7 +57,7 @@ public class PostController {
         return ResponseEntity.ok(updatedPost);
     }
 
-    // Delete post (DELETE /posts/{id})
+    // 게시글 삭제 (DELETE /posts/{id})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable String id) throws AccessDeniedException {
         UUID postId = UUID.fromString(id);
@@ -66,7 +67,7 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    // Write comment (POST /posts/{postId}/comments)
+    // 댓글 작성 (POST /posts/{postId}/comments)
     @PostMapping("/{postId}/comments")
     public ResponseEntity<CommentDto> addComment(@PathVariable String postId, @RequestBody CommentDto commentDto) throws AccessDeniedException {
         UUID outfitId = UUID.fromString(postId);
@@ -76,7 +77,7 @@ public class PostController {
         return ResponseEntity.ok(newComment);
     }
 
-    // Comment reaction (POST /posts/{postId}/comments/{commentId}/react)
+    // 게시글, 댓글 반응 (POST /posts/{postId}/comments/{commentId}/react)
     @PostMapping("/{postId}/comments/{commentId}/react")
     public ResponseEntity<CommentDto> reactComment(
             @PathVariable String postId,
@@ -90,7 +91,7 @@ public class PostController {
         return ResponseEntity.ok(updatedComment);
     }
 
-    // Delete comment (DELETE /posts/{postId}/comments/{commentId})
+    // 댓글 삭제 (DELETE /posts/{postId}/comments/{commentId})
     @DeleteMapping("/{postId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable String postId, @PathVariable String commentId) throws AccessDeniedException {
         UUID commentUUID = UUID.fromString(commentId);

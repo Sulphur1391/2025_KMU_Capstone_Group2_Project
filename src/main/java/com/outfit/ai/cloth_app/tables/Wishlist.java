@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+// 위시리스트 테이블
 @Entity
 @Table(name="wishlist")
 public class Wishlist {
@@ -19,23 +20,18 @@ public class Wishlist {
     @Column(name = "product_link", nullable = false, columnDefinition = "text")
     private String productLink;
 
-    @Column(name = "item_vector", columnDefinition = "vector()")
-    private float[] itemVector;
-
     @Column(name = "added_at", columnDefinition = "timestamptz default current_timestamp")
     private OffsetDateTime addedAt;
 
     public UUID getWishlistId() { return wishlistId; }
+    public void setWishlistId(UUID wishlistId) { this.wishlistId = wishlistId; }
 
-    public String getProductLink() { return productLink; }
-
-    public float[] getItemVector() { return itemVector; }
-
-    public OffsetDateTime getAddedAt() { return addedAt; }
-
+    public UserTable getUserTable() { return userTable; }
     public void setUserTable(UserTable userTable) { this.userTable = userTable; }
 
+    public String getProductLink() { return productLink; }
     public void setProductLink(String productLink) { this.productLink = productLink; }
 
-    public void setItemVector(float[] itemVector) { this.itemVector = itemVector; }
+    public OffsetDateTime getAddedAt() { return addedAt; }
+    public void setAddedAt(OffsetDateTime addedAt) { this.addedAt = addedAt; }
 }

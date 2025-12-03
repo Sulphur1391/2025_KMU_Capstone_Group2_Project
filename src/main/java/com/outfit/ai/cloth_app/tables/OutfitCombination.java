@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+// 옷 조합 테이블
 @Entity
 @Table(name="outfit_combination")
 public class OutfitCombination {

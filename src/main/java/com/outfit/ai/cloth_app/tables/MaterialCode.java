@@ -2,6 +2,7 @@ package com.outfit.ai.cloth_app.tables;
 
 import jakarta.persistence.*;
 
+// 옷 재질 테이블
 @Entity
 @Table(name="material_code")
 public class MaterialCode {
@@ -14,9 +15,9 @@ public class MaterialCode {
 
     public MaterialCode() {}
 
-    public String getMaterialName() { return materialName; }
-
     public int getMaterialId() { return materialId; }
+    public void setMaterialId(int materialId) { this.materialId = materialId; }
 
+    public String getMaterialName() { return materialName; }
     public void setMaterialName(String materialName) { this.materialName = materialName; }
 }

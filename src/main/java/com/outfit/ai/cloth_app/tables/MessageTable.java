@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 
+// 쪽지 메시지 테이블
 @Entity
 @Table(name="message_table")
 public class MessageTable {
@@ -39,15 +40,20 @@ public class MessageTable {
     }
 
     public long getMessageId() { return messageId; }
-    public UserTable getSender() { return sender; }
-    public UserTable getReceiver() { return receiver; }
-    public String getContent() { return content; }
-    public OffsetDateTime getSentAt() { return sentAt; }
-    public boolean getIsRead() { return isRead; }
+    public void setMessageId(long messageId) { this.messageId = messageId; }
 
+    public UserTable getSender() { return sender; }
     public void setSender(UserTable sender) { this.sender = sender; }
+
+    public UserTable getReceiver() { return receiver; }
     public void setReceiver(UserTable receiver) { this.receiver = receiver; }
+
+    public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
+
+    public OffsetDateTime getSentAt() { return sentAt; }
     public void setSentAt(OffsetDateTime sentAt) { this.sentAt = sentAt; }
+
+    public boolean getIsRead() { return isRead; }
     public void setRead(boolean isRead) { this.isRead = isRead; }
 }

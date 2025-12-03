@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+// 마이페이지 컨트롤러
 @RestController
 @RequestMapping("/api/v1/mypage")
 public class MyPageController {
@@ -19,6 +20,7 @@ public class MyPageController {
         this.myPageService = myPageService;
     }
 
+    // 프로필 정보 불러오기
     @GetMapping("/profile")
     public ResponseEntity<MyPageProfileResponseDto> getMyProfile(@AuthenticationPrincipal String userIdString) {
         UUID userId = UUID.fromString(userIdString);

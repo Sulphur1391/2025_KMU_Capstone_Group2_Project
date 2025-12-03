@@ -2,6 +2,7 @@ package com.outfit.ai.cloth_app.tables;
 
 import jakarta.persistence.*;
 
+// 옷 색깔 테이블
 @Entity
 @Table(name="color_code")
 public class ColorCode {
@@ -17,13 +18,12 @@ public class ColorCode {
 
     public ColorCode() {}
 
-    public String getColorName() { return colorName; }
-
-    public String getHexCode() { return hexCode; }
-
     public int getColorId() { return colorId; }
+    public void setColorId(int colorId) { this.colorId = colorId; }
 
+    public String getColorName() { return colorName; }
     public void setColorName(String colorName) { this.colorName = colorName; }
 
+    public String getHexCode() { return hexCode; }
     public void setHexCode(String hexCode) { this.hexCode = hexCode; }
 }

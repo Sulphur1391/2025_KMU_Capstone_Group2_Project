@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+// 캘린더 테이블
 @Entity
 @Table(name="user_calendar")
 public class UserCalendar {
@@ -45,42 +46,36 @@ public class UserCalendar {
     private OffsetDateTime createdAt;
 
     public UUID getEventId() { return eventId; }
-
-    public String getGoogleEventId() { return googleEventId; }
-
-    public UserTable getUserTable() { return userTable; }
-
-    public OffsetDateTime getStartTime() { return startTime; }
-
-    public OffsetDateTime getEndTime() { return endTime; }
-
-    public String getEventSummary() { return eventSummary; }
-
-    public String getDressCodeTag() { return dressCodeTag; }
-
-    public String getLocation() { return location; }
-
-    public String getJsonData() { return jsonData; }
-
-    public OffsetDateTime getCreatedAt() { return createdAt; }
-
     public void setEventId(UUID eventId) { this.eventId = eventId; }
 
+    public String getGoogleEventId() { return googleEventId; }
     public void setGoogleEventId(String googleEventId) { this.googleEventId = googleEventId; }
 
+    public UserTable getUserTable() { return userTable; }
     public void setUserTable(UserTable userTable) { this.userTable = userTable; }
 
+    public OffsetDateTime getStartTime() { return startTime; }
     public void setStartTime(OffsetDateTime startTime) { this.startTime = startTime; }
 
+    public OffsetDateTime getEndTime() { return endTime; }
     public void setEndTime(OffsetDateTime endTime) { this.endTime = endTime; }
 
+    public String getEventSummary() { return eventSummary; }
     public void setEventSummary(String eventSummary) { this.eventSummary = eventSummary; }
 
+    public String getDressCodeTag() { return dressCodeTag; }
     public void setDressCodeTag(String dressCodeTag) { this.dressCodeTag = dressCodeTag; }
 
+    public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 
+    public String getJsonData() { return jsonData; }
     public void setJsonData(String jsonData) { this.jsonData = jsonData; }
 
+    public Boolean getAllDay() { return isAllDay; }
     public void setIsAllDay(Boolean allDay) { isAllDay = allDay; }
+
+    public OffsetDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+
 }

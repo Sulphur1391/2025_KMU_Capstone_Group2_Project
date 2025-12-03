@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+// 쪽지 컨트롤러
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
@@ -28,6 +29,7 @@ public class MessageController {
         return UUID.fromString(authentication.getName());
     }
 
+    // 메시지 보내기
     @PostMapping
     public ResponseEntity<MessageDto> sendMessage(@RequestBody MessageDto message) {
         UUID senderId = getAuthenticatedUserId();
@@ -36,6 +38,7 @@ public class MessageController {
         return ResponseEntity.ok(sentMessage);
     }
 
+    // 쪽지함 보기
     @GetMapping("/inbox")
     public ResponseEntity<List<MessageDto>> getInbox() {
         UUID receiverId = getAuthenticatedUserId();
@@ -43,6 +46,7 @@ public class MessageController {
         return ResponseEntity.ok(inbox);
     }
 
+    // 받은 메시지
     @GetMapping("/sent")
     public ResponseEntity<List<MessageDto>> getSent() {
         UUID senderId = getAuthenticatedUserId();

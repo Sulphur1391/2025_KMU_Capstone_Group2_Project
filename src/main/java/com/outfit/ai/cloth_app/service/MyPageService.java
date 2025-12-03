@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+// 마이페이지 서비스
 @Service
 public class MyPageService {
     private final UserRepository userRepository;
@@ -16,6 +17,7 @@ public class MyPageService {
         this.userRepository = userRepository;
     }
 
+    // 프로필 불러오기
     public MyPageProfileResponseDto getMyProfile(UUID userId) {
         UserTable user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("유저를 찾을 수 없습니다."));
