@@ -10,14 +10,18 @@ services:
       timeout: 3s
       retries: 5
 
-  backend-app:
+  cloth-app:
     build: .
-    container_name: backend-app
+    container_name: cloth-app
     ports:
       - "8080:8080"
     depends_on:
       redis-cache:
-        condition: service_healthy  # ⭐ Redis가 healthy 상태일 때만 실행
+        condition: service_healthy
+
+    env_file:
+      - .env
+
     environment:
       - spring.data.redis.host=redis-cache
       - spring.data.redis.port=6379
