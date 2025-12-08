@@ -14,5 +14,4 @@ public class NotificationDto {
         this.senderId = senderId;
         this.targetId = targetId;
     }
-    // getter, setter 생략
 }

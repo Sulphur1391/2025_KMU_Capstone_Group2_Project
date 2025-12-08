@@ -4,7 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.capston'
+group = 'com.outfit.ai.cloth_app'
 version = '0.0.1-SNAPSHOT'
 description = 'project_1009'
 
@@ -14,55 +14,83 @@ java {
 	}
 }
 
+repositories {
+	mavenCentral()
+	google()
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
 }
 
-repositories {
-	mavenCentral()
-	google() // Google 라이브러리를 위해 추가
-}
-
 dependencies {
-	// ⭐ Redis 캐시 연동
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-	// ⭐ 캐싱 시스템
-	implementation 'org.springframework.boot:spring-boot-starter-cache'
-
-	// ⭐ H2 DB (테스트용)
-	runtimeOnly 'com.h2database:h2'
-
-	// ⭐ JPA + PostgreSQL
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly 'org.postgresql:postgresql:42.6.0'
-
-	// ⭐ Spring 기본 기능
+	/* =======================
+         Spring Boot Core
+    ======================= */
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-	// ⭐ Lombok
+	/* =======================
+         DB / Driver
+    ======================= */
+	runtimeOnly 'org.postgresql:postgresql'
+
+	/* =======================
+         Hibernate / Vector / Hypersistence
+    ======================= */
+	implementation 'org.hibernate.orm:hibernate-vector:6.4.0.Final'
+	implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.11.0'
+
+	/* =======================
+         Spring Security / OAuth2
+    ======================= */
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-oauth2-client'
+
+	/* =======================
+         AWS S3
+    ======================= */
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+
+	/* =======================
+         Google Calendar API (⭐ 네 버전 유지)
+    ======================= */
+	implementation 'com.google.auth:google-auth-library-oauth2-http:1.23.0'
+	implementation 'com.google.http-client:google-http-client-jackson2:1.44.2'
+	implementation 'com.google.code.gson:gson'
+
+	// ⭐ 최신 Calendar API (2025 버전)
+	implementation 'com.google.apis:google-api-services-calendar:v3-rev20250115-2.0.0'
+
+	/* =======================
+         JWT
+    ======================= */
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	/* =======================
+         Lombok / Devtools
+    ======================= */
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-
-	// ⭐ DevTools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	// ⭐ Test
+	/* =======================
+         Test
+    ======================= */
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-	// ⭐ Google Calendar API 관련
-	implementation 'com.google.apis:google-api-services-calendar:v3-rev20250115-2.0.0' // 존재하는 안정 버전
-	implementation 'com.google.auth:google-auth-library-oauth2-http:1.23.0'
-	implementation 'com.google.http-client:google-http-client-jackson2:1.44.2' // JacksonFactory 포함
 }
 
 tasks.named('test') {
