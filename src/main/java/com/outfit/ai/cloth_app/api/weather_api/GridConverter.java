@@ -45,3 +45,4 @@ public class GridConverter {
     public static String getNx(String location) { return convertLocationToGrid(location).getNx(); }
     public static String getNy(String location) { return convertLocationToGrid(location).getNy(); }
 }
+
