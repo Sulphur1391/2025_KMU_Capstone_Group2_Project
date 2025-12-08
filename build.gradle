@@ -19,7 +19,7 @@ java {
 
 repositories {
 	mavenCentral()
-	google() // Google 라이브러리를 위해 추가 (당신의 것 유지)
+	google() // Google 라이브러리를 위해 추가 (유지)
 }
 
 configurations {
@@ -42,7 +42,7 @@ dependencies {
 
 	// DB Driver
 	runtimeOnly 'org.postgresql:postgresql' // 팀원의 버전 관리 방식 채택
-	runtimeOnly 'com.h2database:h2' // ⭐ 당신의 H2 DB 추가 (테스트용)
+	runtimeOnly 'com.h2database:h2' // ⭐ H2 DB 추가 (테스트용)
 
 	// Vector, Hibernate, and Utility Dependencies
 	implementation 'org.hibernate.orm:hibernate-vector:6.4.0.Final'
@@ -58,7 +58,7 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-	// Google APIs (⭐ 당신의 최신 버전으로 통합 및 정리)
+	// Google APIs (⭐최신 버전으로 통합 및 정리)
 	implementation 'com.google.auth:google-auth-library-oauth2-http:1.23.0'
 	implementation 'com.google.http-client:google-http-client-jackson2:1.44.2'
 	implementation 'com.google.code.gson:gson'

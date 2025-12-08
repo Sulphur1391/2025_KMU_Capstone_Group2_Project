@@ -1,15 +1,11 @@
 package com.outfit.ai.cloth_app.dto.request;
 
-<<<<<<< HEAD
 // 옷 생성 요청 DTO
-=======
->>>>>>> origin/main
 public class ClothesCreateRequestDto {
     private String name;
     private String categoryName;
     private String materialName;
     private String colorName;
-<<<<<<< HEAD
     private String styleName;
     private String seasonName;
     private String itemTypeName;
@@ -35,16 +31,3 @@ public class ClothesCreateRequestDto {
     public String getItemTypeName() { return itemTypeName; }
     public void setItemTypeName(String itemTypeName) { this.itemTypeName = itemTypeName; }
 }
-=======
-
-    public String getName() { return name; }
-    public String getCategoryName() { return categoryName; }
-    public String getMaterialName() { return materialName; }
-    public String getColorName() { return colorName; }
-
-    public void setName(String name) { this.name = name; }
-    public void setCategoryCode(String categoryName) { this.categoryName = categoryName; }
-    public void setMaterialCode(String materialName) { this.materialName = materialName; }
-    public void setColorCode(String colorName) { this.colorName = colorName; }
-}
->>>>>>> origin/main

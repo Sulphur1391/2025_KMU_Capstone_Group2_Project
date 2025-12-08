@@ -22,6 +22,7 @@ target/
 # .gitignore
 .env
 
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
