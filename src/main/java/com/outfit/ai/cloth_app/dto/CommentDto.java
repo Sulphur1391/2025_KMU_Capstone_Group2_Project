@@ -1,17 +1,17 @@
 package com.outfit.ai.cloth_app.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 @Builder
 public class CommentDto {
     private Long id;
     private String content;
-    private int likes;
-    private int dislikes;
-    // FIXED: authorId를 String -> Long으로 변경하여 Entity(User.id)와 타입 정합성 맞춤
+    private Integer likes;
+    private Integer dislikes;
     private Long authorId;
-    private String targetId;
+
+    // 🔥 수정됨: String → Long
+    private Long targetId;
 }

@@ -1,38 +1,24 @@
 package com.outfit.ai.cloth_app.dto;
 
-import java.time.LocalDateTime;
+import com.outfit.ai.cloth_app.entity.Message;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
+@Builder
 public class MessageDto {
+
     private Long id;
-    // FIXED: sender/receiver를 String으로 쓰지 않고 userId(Long)로 참조
     private Long senderId;
     private Long receiverId;
     private String content;
-    private LocalDateTime sentAt = LocalDateTime.now();
 
-    public MessageDto() {}
-
-    public MessageDto(Long id, Long senderId, Long receiverId, String content) {
-        this.id = id;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.content = content;
-        this.sentAt = LocalDateTime.now();
+    public static MessageDto from(Message message) {
+        return MessageDto.builder()
+                .id(message.getId())
+                .senderId(message.getSender().getId())
+                .receiverId(message.getReceiver().getId())
+                .content(message.getContent())
+                .build();
     }
-
-    // getters & setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getSenderId() { return senderId; }
-    public void setSenderId(Long senderId) { this.senderId = senderId; }
-
-    public Long getReceiverId() { return receiverId; }
-    public void setReceiverId(Long receiverId) { this.receiverId = receiverId; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
-    public LocalDateTime getSentAt() { return sentAt; }
-    public void setSentAt(LocalDateTime sentAt) { this.sentAt = sentAt; }
 }
