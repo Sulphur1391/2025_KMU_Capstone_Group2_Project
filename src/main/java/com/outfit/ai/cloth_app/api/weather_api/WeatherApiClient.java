@@ -3,7 +3,6 @@ package com.outfit.ai.cloth_app.api.weather_api;
 import com.outfit.ai.cloth_app.dto.WeatherDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

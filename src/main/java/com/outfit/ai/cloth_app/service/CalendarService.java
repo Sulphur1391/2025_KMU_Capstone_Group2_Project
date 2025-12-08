@@ -1,7 +1,7 @@
-package com.capston.backend.service;
+package com.outfit.ai.cloth_app.service;
 
-import com.capston.backend.entity.RefreshToken;
-import com.capston.backend.repository.RefreshTokenRepository;
+import com.outfit.ai.cloth_app.entity.RefreshToken;
+import com.outfit.ai.cloth_app.repository.RefreshTokenRepository;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;

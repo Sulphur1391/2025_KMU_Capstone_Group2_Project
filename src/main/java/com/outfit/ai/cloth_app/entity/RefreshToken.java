@@ -1,4 +1,4 @@
-package com.capston.backend.entity;
+package com.outfit.ai.cloth_app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

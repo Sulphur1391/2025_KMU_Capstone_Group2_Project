@@ -1,5 +1,6 @@
 package com.outfit.ai.cloth_app.dto;
 
+<<<<<<< HEAD
 import com.outfit.ai.cloth_app.tables.CommunityInteractions;
 
 // 댓글 DTO
@@ -42,4 +43,20 @@ public class CommentDto {
 
         return dto;
     }
+=======
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class CommentDto {
+    private Long id;
+    private String content;
+    private Integer likes;
+    private Integer dislikes;
+    private Long authorId;
+
+    // 🔥 수정됨: String → Long
+    private Long targetId;
+>>>>>>> origin/main
 }

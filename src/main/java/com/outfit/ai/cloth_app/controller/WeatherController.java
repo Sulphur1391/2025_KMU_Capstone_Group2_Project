@@ -2,6 +2,7 @@ package com.outfit.ai.cloth_app.controller;
 
 import com.outfit.ai.cloth_app.dto.WeatherDto;
 import com.outfit.ai.cloth_app.service.WeatherService;
+<<<<<<< HEAD
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +14,21 @@ import org.springframework.web.bind.annotation.*;
 public class WeatherController {
     private final WeatherService weatherService;
     private final Logger log = LoggerFactory.getLogger(WeatherController.class);
+=======
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/weather")
+public class WeatherController {
+
+    private final WeatherService weatherService;
+>>>>>>> origin/main
 
     public WeatherController(WeatherService weatherService) {
         this.weatherService = weatherService;
     }
 
+<<<<<<< HEAD
     // 현재 지역의 최근 날씨 불러오가
     @GetMapping
     public ResponseEntity<WeatherDto> getLatestWeatherByLocation(
@@ -34,5 +45,10 @@ public class WeatherController {
 
         log.info("날씨 정보 조회 성공 및 반환: {}", location);
         return ResponseEntity.ok(weatherDto);
+=======
+    @GetMapping(produces = "application/json; charset=UTF-8")
+    public WeatherDto getWeather(@RequestParam String location) {
+        return weatherService.getWeather(location);
+>>>>>>> origin/main
     }
 }

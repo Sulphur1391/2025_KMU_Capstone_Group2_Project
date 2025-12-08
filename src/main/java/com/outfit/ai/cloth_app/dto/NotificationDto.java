@@ -1,4 +1,4 @@
-package com.capston.backend.dto;
+package com.outfit.ai.cloth_app.dto;
 
 public class NotificationDto {
     private String type;       // COMMENT, MESSAGE 등
