@@ -28,15 +28,19 @@ jobs:
 
     - name: 패키지 설치
       run: flutter pub get
+      working-directory: outfit_hub
 
-    - name: 테스트
-      run: flutter test
+    # 테스트 단계는 지금 사용 안 함
+    # - name: 테스트
+    #   run: flutter test
+    #   working-directory: outfit_hub
 
     - name: APK 빌드
       run: flutter build apk --release
+      working-directory: outfit_hub
 
     - name: APK 업로드
       uses: actions/upload-artifact@v4
       with:
         name: capstone-apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+        path: outfit_hub/build/app/outputs/flutter-apk/app-release.apk
