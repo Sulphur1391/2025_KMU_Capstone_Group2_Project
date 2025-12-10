@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * NoticeService
  * - 서버에서 특정 유저에게 1:1 알림을 보낼 때 사용하는 서비스
@@ -24,7 +26,7 @@ public class NoticeService {
      * 댓글 알림 전송
      * 경로: /user/{targetUserId}/queue/notice
      */
-    public void sendCommentNotice(Long targetUserId, NotificationDto notification) {
+    public void sendCommentNotice(UUID targetUserId, NotificationDto notification) {
         // Spring은 userDestinationPrefix("/user") + destination => "/user/{id}/queue/notice"
         messagingTemplate.convertAndSendToUser(
                 targetUserId.toString(),
@@ -36,7 +38,7 @@ public class NoticeService {
     /**
      * 쪽지 알림 전송
      */
-    public void sendMessageNotice(Long targetUserId, NotificationDto notification) {
+    public void sendMessageNotice(UUID targetUserId, NotificationDto notification) {
         messagingTemplate.convertAndSendToUser(
                 targetUserId.toString(),
                 "/queue/notice",

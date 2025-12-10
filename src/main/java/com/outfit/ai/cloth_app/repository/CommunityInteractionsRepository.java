@@ -1,7 +1,7 @@
 package com.outfit.ai.cloth_app.repository;
 
-import com.outfit.ai.cloth_app.tables.CommunityInteractions;
-import com.outfit.ai.cloth_app.tables.OutfitCombination;
+import com.outfit.ai.cloth_app.entity.tables.CommunityInteractions;
+import com.outfit.ai.cloth_app.entity.tables.OutfitCombination;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

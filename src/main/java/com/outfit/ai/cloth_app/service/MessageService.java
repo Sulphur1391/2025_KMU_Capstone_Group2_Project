@@ -1,51 +1,66 @@
 package com.outfit.ai.cloth_app.service;
 
-import com.outfit.ai.cloth_app.entity.Message;
-import com.outfit.ai.cloth_app.entity.User;
-import com.outfit.ai.cloth_app.repository.AppUserRepository; // 변경
-import com.outfit.ai.cloth_app.repository.MessageRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import com.outfit.ai.cloth_app.dto.MessageDto;
+import com.outfit.ai.cloth_app.repository.MessageTableRepository;
+import com.outfit.ai.cloth_app.repository.UserRepository;
+import com.outfit.ai.cloth_app.entity.tables.MessageTable;
+import com.outfit.ai.cloth_app.entity.tables.UserTable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
+// 쪽지 서비스
 @Service
-@RequiredArgsConstructor
-@Transactional
 public class MessageService {
+    private final MessageTableRepository messageRepository;
+    private final UserRepository userRepository;
 
-    private final MessageRepository messageRepository;
-    private final AppUserRepository userRepository; // 변경
-
-    public Message sendMessage(Long senderId, Long receiverId, String content) {
-        User sender = userRepository.findById(senderId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "보내는 사용자가 없습니다."));
-        User receiver = userRepository.findById(receiverId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "받는 사용자가 없습니다."));
-
-        Message message = new Message();
-        message.setSender(sender);
-        message.setReceiver(receiver);
-        message.setContent(content);
-
-        return messageRepository.save(message);
+    public MessageService(MessageTableRepository messageRepository, UserRepository userRepository) {
+        this.messageRepository = messageRepository;
+        this.userRepository = userRepository;
     }
 
-    public List<Message> getReceivedMessages(Long receiverId) {
-        return messageRepository.findByReceiver_Id(receiverId);
+    // 쪽지 보내기
+    public MessageDto sendMessage(UUID senderId, MessageDto messageDto) {
+        UserTable sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new RuntimeException("Sender not found."));
+        UserTable receiver = userRepository.findByUsername(messageDto.getReceiver())
+                .orElseThrow(() -> new RuntimeException("Receiver not found."));
+
+        MessageTable message = new MessageTable(
+                sender,
+                receiver,
+                messageDto.getContent()
+        );
+
+        MessageTable savedMessage = messageRepository.save(message);
+
+        return MessageDto.fromEntity(savedMessage);
     }
 
-    public List<Message> getSentMessages(Long senderId) {
-        return messageRepository.findBySender_Id(senderId);
+    // 쪽지함 불러오기
+    public List<MessageDto> getInbox(UUID receiverId) {
+        UserTable receiver = userRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+
+        List<MessageTable> messages = messageRepository.findByReceiver(receiver);
+
+        return messages.stream()
+                .map(MessageDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
-    public void deleteMessage(Long id) {
-        if (!messageRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "메시지가 존재하지 않습니다.");
-        }
-        messageRepository.deleteById(id);
+    // 받은 쪽지 불러오기
+    public List<MessageDto> getSent(UUID senderId) {
+        UserTable sender = userRepository.findById(senderId)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+
+        List<MessageTable> messages = messageRepository.findBySender(sender);
+
+        return messages.stream()
+                .map(MessageDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }

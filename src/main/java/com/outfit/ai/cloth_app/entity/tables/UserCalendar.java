@@ -1,9 +1,8 @@
-package com.outfit.ai.cloth_app.tables;
+package com.outfit.ai.cloth_app.entity.tables;
 
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 // 캘린더 테이블

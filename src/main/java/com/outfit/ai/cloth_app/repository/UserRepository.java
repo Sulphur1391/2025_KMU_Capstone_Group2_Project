@@ -1,7 +1,6 @@
 package com.outfit.ai.cloth_app.repository;
 
-import com.outfit.ai.cloth_app.tables.UserTable;
-import org.apache.catalina.User;
+import com.outfit.ai.cloth_app.entity.tables.UserTable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

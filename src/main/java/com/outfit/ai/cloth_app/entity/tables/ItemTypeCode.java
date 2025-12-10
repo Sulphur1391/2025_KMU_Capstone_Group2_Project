@@ -1,4 +1,4 @@
-package com.outfit.ai.cloth_app.tables;
+package com.outfit.ai.cloth_app.entity.tables;
 
 import jakarta.persistence.*;
 
@@ -7,30 +7,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-// 계절(봄, 여름, 가을, 겨울, 사계절 등) 테이블
+// 옷 종류(맨투맨, 티셔츠 등) 테이블
 @Entity
-@Table(name = "season_code")
-public class SeasonCode {
+@Table(name = "item_type_code")
+public class ItemTypeCode {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID seasonId;
+    private UUID itemTypeId;
 
-    @OneToMany(mappedBy = "seasonCode", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "itemTypeCode", cascade = CascadeType.ALL)
     private List<ClothesTable> clothesTableList = new ArrayList<>();
 
-    @Column(name = "season_name", nullable = false, length = 50)
-    private String seasonName;
+    @Column(name = "item_type_name", nullable = false, length = 50)
+    private String itemTypeName;
 
     @Column(name = "created_at", columnDefinition = "timestamptz default current_timestamp")
     private OffsetDateTime createdAt;
 
-    public UUID getSeasonId() { return seasonId; }
+    public UUID getItemTypeId() { return itemTypeId; }
     public List<ClothesTable> getClothesTableList() { return clothesTableList; }
-    public String getSeasonName() { return seasonName; }
+    public String getItemTypeName() { return itemTypeName; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
 
-    public void setSeasonId(UUID seasonId) { this.seasonId = seasonId; }
+    public void setItemTypeId(UUID itemTypeId) { this.itemTypeId = itemTypeId; }
     public void setClothesTableList(List<ClothesTable> clothesTableList) { this.clothesTableList = clothesTableList; }
-    public void setSeasonName(String seasonName) { this.seasonName = seasonName; }
+    public void setItemTypeName(String itemTypeName) { this.itemTypeName = itemTypeName; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
 }
