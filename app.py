@@ -6,7 +6,7 @@ from clothes_analyzer import analyze_clothes
 
 app = Flask(__name__)
 
-# ¾÷·Îµå ÀÓ½Ã Æú´õ
+# ì—…ë¡œë“œ ì„ì‹œ í´ë”
 UPLOAD_DIR = "uploaded_images"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
@@ -19,47 +19,47 @@ def health_check():
 @app.route("/api/analyze-clothes", methods=["POST"])
 def analyze_clothes_api():
     """
-    ¸ğ¹ÙÀÏ ¾Û¿¡¼­ º¸³½ ÀÌ¹ÌÁö ÆÄÀÏÀ» ¹Ş¾Æ¼­
-    analyze_clothes·Î ºĞ¼®ÇÏ°í JSONÀ¸·Î ¹İÈ¯.
+    ëª¨ë°”ì¼ ì•±ì—ì„œ ë³´ë‚¸ ì´ë¯¸ì§€ íŒŒì¼ì„ ë°›ì•„ì„œ
+    analyze_clothesë¡œ ë¶„ì„í•˜ê³  JSONìœ¼ë¡œ ë°˜í™˜.
     """
     if "file" not in request.files:
-        return jsonify({"detail": "file ÇÊµå°¡ ÇÊ¿äÇÕ´Ï´Ù."}), 400
+        return jsonify({"detail": "file í•„ë“œê°€ í•„ìš”í•©ë‹ˆë‹¤."}), 400
 
     file = request.files["file"]
 
     if file.filename == "":
-        return jsonify({"detail": "ÆÄÀÏ ÀÌ¸§ÀÌ ºñ¾î ÀÖ½À´Ï´Ù."}), 400
+        return jsonify({"detail": "íŒŒì¼ ì´ë¦„ì´ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤."}), 400
 
-    # È®ÀåÀÚ Ã¼Å©
+    # í™•ì¥ì ì²´í¬
     _, ext = os.path.splitext(file.filename)
     ext = ext.lower()
     if ext not in [".jpg", ".jpeg", ".png", ".webp"]:
-        return jsonify({"detail": "Áö¿øÇÏÁö ¾Ê´Â ÀÌ¹ÌÁö Çü½ÄÀÔ´Ï´Ù."}), 400
+        return jsonify({"detail": "ì§€ì›í•˜ì§€ ì•ŠëŠ” ì´ë¯¸ì§€ í˜•ì‹ì…ë‹ˆë‹¤."}), 400
 
-    # ÀÓ½Ã ÆÄÀÏ °æ·Î »ı¼º
+    # ì„ì‹œ íŒŒì¼ ê²½ë¡œ ìƒì„±
     temp_filename = f"{uuid.uuid4()}{ext}"
     temp_path = os.path.join(UPLOAD_DIR, temp_filename)
 
     try:
-        # ÆÄÀÏ ÀúÀå
+        # íŒŒì¼ ì €ì¥
         file.save(temp_path)
     except Exception as e:
-        return jsonify({"detail": f"ÆÄÀÏ ÀúÀå Áß ¿À·ù: {str(e)}"}), 500
+        return jsonify({"detail": f"íŒŒì¼ ì €ì¥ ì¤‘ ì˜¤ë¥˜: {str(e)}"}), 500
 
-    # ºĞ¼® ½ÇÇà
+    # ë¶„ì„ ì‹¤í–‰
     try:
         result = analyze_clothes(temp_path)
     except Exception as e:
-        return jsonify({"detail": f"ÀÌ¹ÌÁö ºĞ¼® Áß ¿À·ù: {str(e)}"}), 500
+        return jsonify({"detail": f"ì´ë¯¸ì§€ ë¶„ì„ ì¤‘ ì˜¤ë¥˜: {str(e)}"}), 500
     finally:
-        # ÀÓ½Ã ÆÄÀÏ »èÁ¦ (¿øÇÏ¸é ÁÖ±âÀûÀ¸·Î¸¸ Áö¿ìµµ·Ï ¹Ù²ãµµ µÊ)
+        # ì„ì‹œ íŒŒì¼ ì‚­ì œ (ì›í•˜ë©´ ì£¼ê¸°ì ìœ¼ë¡œë§Œ ì§€ìš°ë„ë¡ ë°”ê¿”ë„ ë¨)
         if os.path.exists(temp_path):
             os.remove(temp_path)
 
-    # Flask´Â dict¸¦ ÀÚµ¿À¸·Î JSON º¯È¯
+    # FlaskëŠ” dictë¥¼ ìë™ìœ¼ë¡œ JSON ë³€í™˜
     return jsonify(result)
 
 
 if __name__ == "__main__":
-    # ·ÎÄÃ °³¹ß¿ë
+    # ë¡œì»¬ ê°œë°œìš©
     app.run(host="0.0.0.0", port=8000, debug=True)
