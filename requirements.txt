@@ -1,0 +1,5 @@
+flask
+inference-sdk
+Pillow
+numpy
+gunicorn

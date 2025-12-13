@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# colors.py
 from PIL import Image
 import numpy as np
 
