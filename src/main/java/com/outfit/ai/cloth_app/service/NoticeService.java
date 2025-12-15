@@ -26,6 +26,7 @@ public class NoticeService {
      * 댓글 알림 전송
      * 경로: /user/{targetUserId}/queue/notice
      */
+
     public void sendCommentNotice(UUID targetUserId, NotificationDto notification) {
         // Spring은 userDestinationPrefix("/user") + destination => "/user/{id}/queue/notice"
         messagingTemplate.convertAndSendToUser(
